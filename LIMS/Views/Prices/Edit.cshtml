@@ -1,0 +1,45 @@
+﻿@model LIMS.Models.Prices
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Редактирование цены</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger">@ViewBag.ErrorMessage</div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Supplyerid" class="control-label">Поставщик</label>
+                <select asp-for="Supplyerid" class="form-control" asp-items="ViewBag.Supplyerid" id="supplyer"></select>
+                <span asp-validation-for="Supplyerid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nomenclid" class="control-label">Номенклатура</label>
+                <select asp-for="Nomenclid" class="form-control" asp-items="ViewBag.Nomenclid" id="nomencl"></select>
+                <span asp-validation-for="Nomenclid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Цена за единицу измерения, руб.</label>
+                <input asp-for="Price" class="form-control" id="Price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад к перечню</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/NomSelect.js"></script>
+<script src="~/js/Validator.js"></script>
+}

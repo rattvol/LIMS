@@ -1,0 +1,36 @@
+﻿@model LIMS.Models.Prices
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Цена на товар</h1>
+
+<div>
+    <h4>Prices</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Поставщик
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Supplyer.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Номенклатура
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Nomencl.Name - @Model.Nomencl.Groupnom.Name
+        </dd>
+        <dt class = "col-sm-2">
+            Цена за единицу измерения, руб.
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
+    <a asp-action="Index">Назад к перечню</a>
+</div>

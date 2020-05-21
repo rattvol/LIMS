@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LIMS.Models.Prices>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+    <a asp-action="Create">Добавить новую цену</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Поставщик
+            </th>
+            <th>
+                Группа ном.
+            </th>
+            <th>
+                Номенклатура
+            </th>
+            <th>
+                Цена за ед.изм.
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplyer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nomencl.Groupnom.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nomencl.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

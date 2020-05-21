@@ -1,0 +1,8 @@
+﻿@model IEnumerable<LIMS.Models.Prices>
+
+    <select id="nomencl">
+        @foreach (var item in Model)
+        {
+            <option value="@item.Nomencl.Id">@item.Nomencl.Name</option>
+        }
+    </select>

@@ -12,7 +12,7 @@ namespace LIMS.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public sbyte? Deleted { get; set; }
+        public bool Deleted { get; set; }
 
         public virtual ICollection<Nomencl> Nomencl { get; set; }
     }

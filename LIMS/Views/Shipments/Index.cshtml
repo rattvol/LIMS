@@ -1,0 +1,60 @@
+﻿@model IEnumerable<LIMS.Models.Shipment>
+@using LIMS.Environment;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Приходные документы</h1>
+
+<p>
+    <a asp-action="Create">Добавить новый приходный документ</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Номер приходного документа
+            </th>
+            <th>
+                Дата
+            </th>
+            <th>
+                Поставщик
+            </th>
+            <th>
+                Сумма
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string dateof = UnixTimeConverter.ConvertFromUnixTimestamp(item.Suppdate).ToShortDateString();
+            decimal summ = 0;
+            foreach (Shipdoc line in item.Shipdocs)
+                summ += line.Price * line.Quantity;
+            summ = Math.Round(summ, 2);
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @dateof
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplyer.Name)
+                </td>
+                <td>
+                    @summ.ToString();
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

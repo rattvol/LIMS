@@ -93,7 +93,9 @@ namespace LIMS.Models
                     .HasColumnName("nomenclid")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Price).HasColumnName("price");
+                entity.Property(e => e.Price)
+                .HasColumnName("price")
+                .HasColumnType("decimal(12,2)"); ;
 
                 entity.Property(e => e.Supplyerid)
                     .HasColumnName("supplyerid")
@@ -112,15 +114,12 @@ namespace LIMS.Models
 
             modelBuilder.Entity<Shipdoc>(entity =>
             {
-                entity.HasKey(e => e.Shipmentid)
+                entity.HasKey(e => e.id)
                     .HasName("PRIMARY");
 
                 entity.ToTable("shipdoc");
 
-                entity.HasIndex(e => e.Nomenclid)
-                    .HasName("shipdoc_fk_1");
-
-                entity.Property(e => e.Shipmentid)
+               entity.Property(e => e.Shipmentid)
                     .HasColumnName("shipmentid")
                     .HasColumnType("int(11)");
 
@@ -130,7 +129,7 @@ namespace LIMS.Models
 
                 entity.Property(e => e.Price)
                     .HasColumnName("price")
-                    .HasColumnType("decimal(10,0)");
+                    .HasColumnType("decimal(12,2)");
 
                 entity.Property(e => e.Quantity)
                     .HasColumnName("quantity")
@@ -142,9 +141,8 @@ namespace LIMS.Models
                     .HasConstraintName("shipdoc_fk_1");
 
                 entity.HasOne(d => d.Shipment)
-                    .WithOne(p => p.Shipdoc)
-                    .HasForeignKey<Shipdoc>(d => d.Shipmentid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .WithMany(p => p.Shipdocs)
+                    .HasForeignKey(d => d.Shipmentid)
                     .HasConstraintName("shipdoc_fk");
             });
 
@@ -163,7 +161,9 @@ namespace LIMS.Models
                     .HasColumnName("deleted")
                     .HasColumnType("tinyint(4)");
 
-                entity.Property(e => e.Suppdate).HasColumnName("suppdate");
+                entity.Property(e => e.Suppdate)
+                .HasColumnName("suppdate")
+                .HasColumnName("double");
 
                 entity.Property(e => e.Supplyerid)
                     .HasColumnName("supplyerid")

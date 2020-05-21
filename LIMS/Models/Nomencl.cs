@@ -14,7 +14,7 @@ namespace LIMS.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int? Groupnomid { get; set; }
-        public sbyte? Deleted { get; set; }
+        public bool Deleted { get; set; }
 
         public virtual Groupnom Groupnom { get; set; }
         public virtual ICollection<Prices> Prices { get; set; }
