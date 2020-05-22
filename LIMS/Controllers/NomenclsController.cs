@@ -22,7 +22,7 @@ namespace LIMS.Controllers
         // GET: Nomencls
         public async Task<IActionResult> Index()
         {
-            var lIMSContext = _context.Nomencl.Where(b=>!b.Deleted).OrderBy(b=>b.Groupnomid).Include(n => n.Groupnom);
+            var lIMSContext = _context.Nomencl.Include(n => n.Groupnom).Where(b=>!b.Deleted && !b.Groupnom.Deleted).OrderBy(b=>b.Groupnomid);
             return View(await lIMSContext.ToListAsync());
         }
 

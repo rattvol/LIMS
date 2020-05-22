@@ -1,0 +1,65 @@
+﻿@model LIMS.Models.Shipdoc
+@using LIMS.Environment;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Добавление товаров в приходный документ</h1>
+
+@{
+    string dataOfShipment = UnixTimeConverter.ConvertFromUnixTimestamp(@ViewBag.Shipment.Suppdate).ToShortDateString();
+}
+
+<h1>Приходный документ № @ViewBag.Shipment.Id от @dataOfShipment</h1>
+<div class="d-none" id="ShipmentId">@ViewBag.Shipment.Id</div>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Поставщик
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.Shipment.Supplyer.Name
+        </dd>
+    </dl>
+</div>
+<hr />
+<div id="ListOfGoods"></div>
+
+
+<div class="container mx-auto text-center">
+    <h5>Добавить новый товар</h5>
+    <form id="GoodAddForm"   method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+                <input asp-for="Shipmentid"  hidden value="@ViewBag.Shipment.Id"/>
+            <div class="form-group col">
+                <label asp-for="Nomenclid" class="control-label">Номенклатура</label>
+                <select asp-for="Nomenclid" class="form-control" asp-items="ViewBag.Nomenclid" onchange="GetPrice(this)" id="NomSelector"></select>
+            </div>
+            <div class="form-group col">
+                <label asp-for="Price" class="control-label">Цена</label>
+                <input asp-for="Price" class="form-control" readonly id="PricePlace"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="Quantity" class="control-label">Количество</label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="button" value="Добавить" class="btn btn-primary" onclick="AddForm()"/>
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-controller="Shipments" asp-action="Index">Назад к перечню</a>
+</div>
+
+@section Scripts  {
+    <script src="~/js/PartialListOfGoodsLoad.js"></script>
+<script src="~/js/Validator.js"></script>
+}
+

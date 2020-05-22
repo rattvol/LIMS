@@ -1,36 +1,31 @@
 ﻿@model LIMS.Models.Shipment
+@using LIMS.Environment;
 
 @{
     ViewData["Title"] = "Details";
 }
+@{
+    string dataOfShipment = UnixTimeConverter.ConvertFromUnixTimestamp(Model.Suppdate).ToShortDateString();
+}
 
-<h1>Details</h1>
+<h1>Приходный документ № @Model.Id от @dataOfShipment</h1>
 
 <div>
-    <h4>Shipment</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Suppdate)
+        <dt class="col-sm-2">
+            Поставщик
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Suppdate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Deleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Deleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplyer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Supplyer.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Supplyer.Name)
         </dd>
     </dl>
+    @await Html.PartialAsync("_GetGoods", Model.Shipdocs)
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Shipdocs" asp-action="Create" asp-route-shipmentid="@Model.Id">Изменить</a> |
+    <a asp-action="Index">Назад к перечню</a>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

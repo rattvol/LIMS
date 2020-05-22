@@ -114,7 +114,7 @@ namespace LIMS.Models
 
             modelBuilder.Entity<Shipdoc>(entity =>
             {
-                entity.HasKey(e => e.id)
+                entity.HasKey(e => e.Id)
                     .HasName("PRIMARY");
 
                 entity.ToTable("shipdoc");
@@ -133,7 +133,7 @@ namespace LIMS.Models
 
                 entity.Property(e => e.Quantity)
                     .HasColumnName("quantity")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("decimal(12,3)");
 
                 entity.HasOne(d => d.Nomencl)
                     .WithMany(p => p.Shipdoc)
@@ -150,9 +150,6 @@ namespace LIMS.Models
             {
                 entity.ToTable("shipment");
 
-                entity.HasIndex(e => e.Supplyerid)
-                    .HasName("shipment_fk");
-
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
@@ -163,7 +160,7 @@ namespace LIMS.Models
 
                 entity.Property(e => e.Suppdate)
                 .HasColumnName("suppdate")
-                .HasColumnName("double");
+                .HasColumnType("double");
 
                 entity.Property(e => e.Supplyerid)
                     .HasColumnName("supplyerid")

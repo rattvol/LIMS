@@ -13,8 +13,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger">@ViewBag.ErrorMessage</div>
             <div class="form-group">
                 <label asp-for="Supplyerid" class="control-label">Поставщик</label>
-                <select asp-for="Supplyerid" class="form-control" asp-items="ViewBag.Supplyerid" id="supplyer"></select>
+                <select asp-for="Supplyerid" class="form-control" asp-items="ViewBag.Supplyerid" id="group"></select>
                 <span asp-validation-for="Supplyerid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Группа номенклатуры</label>
+                <select class="form-control" asp-items="@ViewBag.Groupid" id="group" onchange="NomSelect(this)"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Nomenclid" class="control-label">Номенклатура</label>

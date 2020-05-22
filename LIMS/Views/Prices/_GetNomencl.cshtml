@@ -1,8 +1,8 @@
-﻿@model IEnumerable<LIMS.Models.Prices>
+﻿@model IEnumerable<LIMS.Models.Nomencl>
 
-    <select id="nomencl">
+    <select id="nomencl" name="Nomenclid" class="form-control" >
         @foreach (var item in Model)
         {
-            <option value="@item.Nomencl.Id">@item.Nomencl.Name</option>
+            <option value="@item.Id">@item.Name</option>
         }
     </select>

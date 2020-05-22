@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LIMS.Models;
+using Z.EntityFramework.Plus;
 
 namespace LIMS.Controllers
 {
@@ -21,7 +22,7 @@ namespace LIMS.Controllers
         // GET: Prices
         public async Task<IActionResult> Index()
         {
-            var lIMSContext = _context.Prices.Include(p => p.Nomencl).ThenInclude(nom => nom.Groupnom).Include(p => p.Supplyer);
+            var lIMSContext = _context.Prices.Include(p => p.Nomencl).ThenInclude(nom => nom.Groupnom).Include(p => p.Supplyer).OrderBy(b=>b.Supplyerid).ThenBy(b=>b.Nomencl.Groupnomid);
             return View(await lIMSContext.ToListAsync());
         }
 
@@ -49,8 +50,9 @@ namespace LIMS.Controllers
         // GET: Prices/Create
         public IActionResult Create()
         {
-            ViewData["Nomenclid"] = new SelectList(_context.Nomencl, "Id", "Name");
-            ViewData["Supplyerid"] = new SelectList(_context.Supplyer, "Id", "Name");
+            ViewData["Nomenclid"] = new SelectList(_context.Nomencl.Where(b => !b.Deleted), "Id", "Name");
+            ViewData["Supplyerid"] = new SelectList(_context.Supplyer.Where(b=>!b.Deleted), "Id", "Name");
+            ViewData["Groupid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name");
             return View();
         }
 
@@ -67,8 +69,7 @@ namespace LIMS.Controllers
                     //Проверяем на наличие такой-же записи.
                     if (_context.Prices.Any(b => b.Supplyerid == prices.Supplyerid && b.Nomenclid == prices.Nomenclid))
                     {
-                        _context.Update(prices);
-                        await _context.SaveChangesAsync();
+                        _context.Prices.Where(b => b.Supplyerid == prices.Supplyerid && b.Nomenclid == prices.Nomenclid).Update(b=>new Prices() { Price=prices.Price});
                     }
                     else
                     {
@@ -90,8 +91,9 @@ namespace LIMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Nomenclid"] = new SelectList(_context.Nomencl, "Id", "Name", prices.Nomenclid);
-            ViewData["Supplyerid"] = new SelectList(_context.Supplyer, "Id", "Name", prices.Supplyerid);
+            ViewData["Nomenclid"] = new SelectList(_context.Nomencl.Where(b => !b.Deleted), "Id", "Name", prices.Nomenclid);
+            ViewData["Supplyerid"] = new SelectList(_context.Supplyer.Where(b => !b.Deleted), "Id", "Name", prices.Supplyerid);
+            ViewData["Groupid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name", GetGroupId(prices.Nomenclid));
             return View(prices);
         }
 
@@ -108,8 +110,9 @@ namespace LIMS.Controllers
             {
                 return NotFound();
             }
-            ViewData["Nomenclid"] = new SelectList(_context.Nomencl, "Id", "Name", prices.Nomenclid);
-            ViewData["Supplyerid"] = new SelectList(_context.Supplyer, "Id", "Name", prices.Supplyerid);
+            ViewData["Nomenclid"] = new SelectList(_context.Nomencl.Where(b => !b.Deleted), "Id", "Name", prices.Nomenclid);
+            ViewData["Supplyerid"] = new SelectList(_context.Supplyer.Where(b => !b.Deleted), "Id", "Name", prices.Supplyerid);
+            ViewData["Groupid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name", GetGroupId(prices.Nomenclid));
             return View(prices);
         }
 
@@ -144,8 +147,9 @@ namespace LIMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Nomenclid"] = new SelectList(_context.Nomencl, "Id", "Name", prices.Nomenclid);
-            ViewData["Supplyerid"] = new SelectList(_context.Supplyer, "Id", "Name", prices.Supplyerid);
+            ViewData["Nomenclid"] = new SelectList(_context.Nomencl.Where(b => !b.Deleted), "Id", "Name", prices.Nomenclid);
+            ViewData["Supplyerid"] = new SelectList(_context.Supplyer.Where(b => !b.Deleted), "Id", "Name", prices.Supplyerid);
+            ViewData["Groupid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name", GetGroupId(prices.Nomenclid));
             return View(prices);
         }
 
@@ -159,6 +163,7 @@ namespace LIMS.Controllers
 
             var prices = await _context.Prices
                 .Include(p => p.Nomencl)
+                .ThenInclude(nom=>nom.Groupnom)
                 .Include(p => p.Supplyer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (prices == null)
@@ -185,9 +190,15 @@ namespace LIMS.Controllers
             return _context.Prices.Any(e => e.Id == id);
         }
 
-        public async Task<ActionResult> GetNomencl(int supplid)
+        [Route("GetNomencl/{groupid}")]
+        public ActionResult GetNomencl(int groupid)
         {
-            return PartialView(await _context.Prices.Where(b => b.Supplyerid == supplid).Include(b => b.Nomencl).ThenInclude(num => num.Groupnom).ToListAsync());
+            List<Nomencl> item = _context.Nomencl.Where(b => b.Groupnomid == groupid).ToList();
+            return PartialView("_GetNomencl", item);
+        }
+        int GetGroupId (int nomid)
+        {
+            return _context.Nomencl.Where(b => b.Id == nomid).Select(b => b.Groupnomid).FirstOrDefault();
         }
     }
 }

@@ -47,10 +47,10 @@
                     @Html.DisplayFor(modelItem => item.Supplyer.Name)
                 </td>
                 <td>
-                    @summ.ToString();
+                    @summ.ToString()
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                    <a asp-controller="Shipdocs" asp-action="Create" asp-route-shipmentid="@item.Id">Изменить</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                 </td>
