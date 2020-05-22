@@ -39,14 +39,13 @@
                         }
                         <tr class="bg-light">
                             <th scope="col">Код</th>
-                            <th scope="col">Номенклатура</th>
                             <th scope="col">Цена</th>
                             <th scope="col">Количество</th>
                             <th scope="col">Сумма</th>
                         </tr>
                         @foreach (Shipdoc shipdoc in @ViewBag.Shipdocs)
                         {
-                            if (shipdoc.Shipment.Supplyerid == supplyer.Id)
+                            if (shipdoc.Shipment.Supplyerid == supplyer.Id && shipdoc.Nomenclid == nomencl.Id)
                             {
                                 decimal summ = Math.Round(@shipdoc.Price * @shipdoc.Quantity, 2);
                                 sumWeight += @shipdoc.Quantity;
@@ -54,7 +53,6 @@
                                 string suppdate = UnixTimeConverter.ConvertFromUnixTimestamp(@shipdoc.Shipment.Suppdate).ToShortDateString();
                                 <tr>
                                     <th scope="row">@suppdate</th>
-                                    <td>@shipdoc.Nomencl.Name</td>
                                     <td>@shipdoc.Price</td>
                                     <td>@shipdoc.Quantity</td>
                                     <td>@summ.ToString()</td>
@@ -63,7 +61,6 @@
                         }
                         <tr class="bg-light">
                             <th scope="row"></th>
-                            <td></td>
                             <td></td>
                             <td>Итого: @sumWeight</td>
                             <td>Итого: @summMoney</td>
