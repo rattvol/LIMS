@@ -25,13 +25,14 @@ function DeleteGood(id) {
         success: function (result) {
             if (result != "OK") alert("Ошибка");
             // заменяем содержимое присланным частичным представлением.
-            loadPartial()
+            loadPartial();
         }
     });
 }
 //Работа с событием добавления товара.
 function AddForm() {
     var item = $("#GoodAddForm").serialize();
+    var quantityPlace = document.querySelector("#QuantityPlace");
     $.ajax({
         type: 'POST',
         url: '/Shipdocs/Create/',
@@ -40,7 +41,8 @@ function AddForm() {
             // Уведомление об ошибке.
             //if (result != "OK") alert("Ошибка");
             // обновляем представление.
-            loadPartial()
+            loadPartial();
+            quantityPlace.value = "";
         }
     });
 }
@@ -49,6 +51,7 @@ function GetPrice(obj) {
     var nomid = obj.value;
     var shipmentId = document.querySelector("#ShipmentId").innerHTML;
     var pricePlace = document.querySelector("#PricePlace");
+    var quantityPlace = document.querySelector("#QuantityPlace");
     var data = {
         shipmentid: shipmentId,
         nomid: nomid
@@ -60,6 +63,7 @@ function GetPrice(obj) {
         success: function (result) {
             // устанавливаем цену.
             pricePlace.value = result;
+            quantityPlace.value = "";
         }
     });
 }
