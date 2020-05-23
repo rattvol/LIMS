@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<LIMS.Models.Shipdoc>
+@using LIMS.Environment;
 @{ decimal summMoney = 0;
     decimal sumWeight = 0;
+    string quantityTrimmed;
 }
 <div id="ListOfGoods">
     <table class="table">
@@ -21,17 +23,20 @@
                 decimal summ = Math.Round(@shipdoc.Price * @shipdoc.Quantity, 2);
                 sumWeight += @shipdoc.Quantity;
                 summMoney += summ;
+                quantityTrimmed = DoubleTrim.TrimIt(shipdoc.Quantity);
                 <tr>
                     <th scope="row">@shipdoc.Id</th>
                     <td>@shipdoc.Nomencl.Name</td>
                     <td>@shipdoc.Price</td>
-                    <td>@shipdoc.Quantity</td>
+                    <td>@quantityTrimmed</td>
                     <td>@summ.ToString()</td>
                     <td><a href="#" class="btn btn-link" onclick="DeleteGood(@shipdoc.Id)">Удалить</a></td>
                 </tr>
             }
         </tbody>
     </table>
+    @{ quantityTrimmed = DoubleTrim.TrimIt(sumWeight);
+    }
     <dl class="row">
         <dt class="col-sm-2">
             Сумма:
@@ -43,7 +48,7 @@
             Количество:
         </dt>
         <dd class="col-sm-10">
-            @sumWeight
+            @quantityTrimmed
         </dd>
     </dl>
 </div>

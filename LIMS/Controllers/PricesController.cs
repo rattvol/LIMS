@@ -126,7 +126,7 @@ namespace LIMS.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid&& !_context.Prices.Any(b =>b.Id!=prices.Id & b.Supplyerid == prices.Supplyerid & b.Nomenclid == prices.Nomenclid))
             {
                 prices.Price = Math.Round(prices.Price, 2);
                 try
@@ -193,7 +193,7 @@ namespace LIMS.Controllers
         [Route("GetNomencl/{groupid}")]
         public ActionResult GetNomencl(int groupid)
         {
-            List<Nomencl> item = _context.Nomencl.Where(b => b.Groupnomid == groupid).ToList();
+            List<Nomencl> item = _context.Nomencl.Where(b =>!b.Deleted && b.Groupnomid == groupid).ToList();
             return PartialView("_GetNomencl", item);
         }
         int GetGroupId (int nomid)

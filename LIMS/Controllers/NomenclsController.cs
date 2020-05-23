@@ -48,7 +48,7 @@ namespace LIMS.Controllers
         // GET: Nomencls/Create
         public IActionResult Create()
         {
-            ViewData["Groupnomid"] = new SelectList(_context.Groupnom, "Id", "Name");
+            ViewData["Groupnomid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace LIMS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Groupnomid"] = new SelectList(_context.Groupnom, "Id", "Name", nomencl.Groupnomid);
+            ViewData["Groupnomid"] = new SelectList(_context.Groupnom.Where(b=>!b.Deleted), "Id", "Name", nomencl.Groupnomid);
             return View(nomencl);
         }
 
@@ -82,7 +82,7 @@ namespace LIMS.Controllers
             {
                 return NotFound();
             }
-            ViewData["Groupnomid"] = new SelectList(_context.Groupnom, "Id", "Name", nomencl.Groupnomid);
+            ViewData["Groupnomid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name", nomencl.Groupnomid);
             return View(nomencl);
         }
 
@@ -118,7 +118,7 @@ namespace LIMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Groupnomid"] = new SelectList(_context.Groupnom, "Id", "Name", nomencl.Groupnomid);
+            ViewData["Groupnomid"] = new SelectList(_context.Groupnom.Where(b => !b.Deleted), "Id", "Name", nomencl.Groupnomid);
             return View(nomencl);
         }
 
